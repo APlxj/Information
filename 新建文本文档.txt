@@ -1,1 +1,30 @@
 多语言 https://www.cnblogs.com/travellife/p/Android-ying-yong-nei-duo-yu-yan-qie-huan.html
+       http://blog.csdn.net/qq_21983189/article/details/73735278
+
+                    List<String> languages = new ArrayList<>();
+                    languages.add(getResources().getString(R.string.zh));
+                    languages.add(getResources().getString(R.string.en));
+                    ChooseStringDialog dialog = new ChooseStringDialog(getActivity(), languages, tv_language.getText().toString());
+                    dialog.show();
+                    dialog.setListener(new BaseCssDialog.ResultOnClickListener() {
+                        @Override
+                        public void result(String str, int i) {
+                            Resources resources = getContext().getResources();
+                            DisplayMetrics metrics = resources.getDisplayMetrics();
+                            Configuration configuration = resources.getConfiguration();
+                            if (getResources().getString(R.string.zh).equals(str))
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                    configuration.setLocale(Locale.CHINESE);
+                                else configuration.locale = Locale.CHINESE;
+                            else if (getResources().getString(R.string.en).equals(str))
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                                    configuration.setLocale(Locale.US);
+                                else
+                                    configuration.locale = Locale.US;
+                            resources.updateConfiguration(configuration, metrics);
+
+                            Intent intent = new Intent(getActivity(), LodingActivity.class);
+                            //开始新的activity同时移除之前所有的activity
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
